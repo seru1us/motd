@@ -1,3 +1,7 @@
+JUST FORKED THIS TO KEEP TRACK OF MY OWN CHANGES IN MY SCRIPTS.
+
+
+
 # Message of the Day
 
 Collection of my 'Message of the Day' scripts.
