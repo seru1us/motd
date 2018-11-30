@@ -48,7 +48,7 @@ for i in "${!disks[@]}"; do
         raid="RAID Online"
     fi
     # print temp & smartd error
-    out+="${disk}:,${color}${temp}C${undim} |    ${raid},"
+    out+="${disk}:,${color}${temp}${degre}${undim} |    ${raid},"
     # insert \n every $COLUMNS column
     if [ $((($i+1) % $COLUMNS)) -eq 0 ]; then
         out+="\n"
