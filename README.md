@@ -4,6 +4,10 @@ I am using this to document my own MOTD. Obviously, all of the original credit g
 
 https://github.com/yboetz/motd
 
+Here is what it currently looks like:
+
+![alt text](https://github.com/seru1us/motd/blob/master/Screenshot_20181130_102915.png)
+
 I am adding support for MDADM in place of checking the SMART self-test, since I couldn't get it to write to the logs appropriately.
 
 In order to get your smartd to report correctly to work with this (something that was missing from the original repo) I have used the following configuration for my disks. Just slap this in your /etc/smartd.conf.
