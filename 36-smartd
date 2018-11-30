@@ -17,6 +17,7 @@ logfiles='/var/log/syslog /var/log/syslog.1'
 
 # get all lines with smartd entries from syslog
 mapfile -t lines < <(grep -hiP 'smartd\[[[:digit:]]+\]:' $logfiles | grep -iP "(Temperature_Celsius|previous self-test)" | sort -r)
+mdstat=$(cat /proc/mdstat)
 
 out=""
 for i in "${!disks[@]}"; do
@@ -34,8 +35,20 @@ for i in "${!disks[@]}"; do
     if [[ "${temp}" -gt 80 ]]; then
         temp="--"
     fi
+    # check if disks are in mdstat, and then if they are good or not
+    if [[ $mdstat == *"${disk}"* ]]; then
+        raid="true"
+    fi
+    if [[ ${raid} == "true" ]]; then
+        raidstat=$(echo '%s\n' $mdstat | grep -o -P "\b$disk\K\S+\s+")
+    fi
+    if [[ ${raidstat} == *'(F)'* ]]; then
+        raid="RAID OFFLINE"
+    else
+        raid="RAID Online"
+    fi
     # print temp & smartd error
-    out+="${disk}:,${color}${temp}C${undim} |"
+    out+="${disk}:,${color}${temp}C${undim} |    ${raid},"
     # insert \n every $COLUMNS column
     if [ $((($i+1) % $COLUMNS)) -eq 0 ]; then
         out+="\n"
