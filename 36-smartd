@@ -24,7 +24,7 @@ for i in "${!disks[@]}"; do
     disk=${disks[$i]}
     uuid=$(blkid -s UUID -o value "/dev/${disk}")
     #mapfile -t disklines < <(printf -- '%s\n' "${lines[@]}" | grep "${uuid}")
-    temp=$(printf -- '%s\n' "${lines[@]}" | grep "${uuid}" | grep -m 1 "Temperature_Celsius" | awk '{ print $NF }')
+    temp=$(printf -- '%s\n' "${lines[@]}" | grep "/dev/${disk}" | grep -m 1 "Temperature_Celsius" | grep -o -P '\bto\s+.*\[\S+\s+\K(\d+)')
     # color green if temp <= MAX_TEMP, else red
     if [[ "${temp}" -gt "${MAX_TEMP}" ]]; then
         color=$red
