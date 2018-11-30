@@ -24,7 +24,6 @@ for i in "${!disks[@]}"; do
     uuid=$(blkid -s UUID -o value "/dev/${disk}")
     #mapfile -t disklines < <(printf -- '%s\n' "${lines[@]}" | grep "${uuid}")
     temp=$(printf -- '%s\n' "${lines[@]}" | grep "${uuid}" | grep -m 1 "Temperature_Celsius" | awk '{ print $NF }')
-    status=$(printf -- '%s\n' "${lines[@]}" | grep "${uuid}" | grep -m 1 -oP "previous self-test.*" | cut -d' '  -f4-)
     # color green if temp <= MAX_TEMP, else red
     if [[ "${temp}" -gt "${MAX_TEMP}" ]]; then
         color=$red
@@ -35,14 +34,8 @@ for i in "${!disks[@]}"; do
     if [[ "${temp}" -gt 80 ]]; then
         temp="--"
     fi
-    # color green if status is "without error", else red
-    if [[ "${status}" == "without error" ]]; then
-        status_color=$green
-    else
-        status_color=$red
-    fi
     # print temp & smartd error
-    out+="${disk}:,${color}${temp}C${undim} | ${status_color}${status}${undim},"
+    out+="${disk}:,${color}${temp}C${undim} |"
     # insert \n every $COLUMNS column
     if [ $((($i+1) % $COLUMNS)) -eq 0 ]; then
         out+="\n"
